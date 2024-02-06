@@ -14,7 +14,7 @@ services:
       - pg_data:/var/lib/postgresql/data
 
   backend:
-    image: ipoderator/foodgram_backend
+    image: chistyakovn/foodgram_backend
     env_file: .env
     depends_on:
       - db
@@ -23,17 +23,17 @@ services:
       - media:/app/media
 
   frontend:
-    image: ipoderator/foodgram_frontend
+    image: chistyakovn/foodgram_frontend
     volumes:
       - static:/app/result_build/build/
 
   nginx:
-    image: ipoderator/foodgram_nginx
+    image: chistyakovn/foodgram_nginx
     depends_on:
       - backend
       - frontend
     ports:
-      - 8000:80
+      - 8080:80
     volumes:
       - static:/staticfiles/ 
       - media:/app/media/
