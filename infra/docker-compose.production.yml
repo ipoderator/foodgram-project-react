@@ -1,8 +1,7 @@
 volumes:
-  pg_data:
-  static:
-  media:
-  data:
+  postgresql_data:
+  static_value:
+  media_value:
   redoc:
 
 services:
