@@ -28,7 +28,7 @@ services:
       - static:/app/result_build/build/
 
   nginx:
-    image: chistyakovn/foodgram_nginx
+    image: ipoderator/foodgram_nginx
     depends_on:
       - backend
       - frontend
