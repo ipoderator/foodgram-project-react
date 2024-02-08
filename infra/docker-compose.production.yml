@@ -31,7 +31,7 @@ services:
       - static:/app/result_build/build/
 
   nginx:
-    image: nginx:1.19.3
+    image: ipoderator/foodgram_nginx
     ports:
       - "8000:80"
     volumes:
@@ -42,5 +42,6 @@ services:
       - media:/var/html/media/
     depends_on:
       - frontend
-    restart: always
+      - backend
+
     
