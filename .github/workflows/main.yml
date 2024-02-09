@@ -59,9 +59,9 @@ jobs:
           no-cache: true
           push: true
           context: ./backend/
-          tags: ipoderator/foodgram_frontend:latest
+          tags: ipoderator/foodgram_backend:latest
 
-  build_and_push_to_docker_hub_backend:
+  build_frontend_and_push_to_docker_hub:
     if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
@@ -82,7 +82,7 @@ jobs:
           no-cache: true
           push: true
           context: ./backend/
-          tags: ipoderator/foodgram_backend:latest
+          tags: ipoderator/foodgram_frontend:latest
 
   build_nginx_and_push_to_docker_hub:
     name: Push nginx Docker image to DockerHub
@@ -109,7 +109,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: 
       - build_and_push_to_docker_hub
-      - build_and_push_to_docker_hub_backend
+      - build_frontend_and_push_to_docker_hub
       - build_nginx_and_push_to_docker_hub
     steps:
     - name: Checkout repo
