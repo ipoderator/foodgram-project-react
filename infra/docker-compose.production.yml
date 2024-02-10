@@ -17,12 +17,13 @@ services:
       - pg_data:/var/lib/postgresql/data
 
   backend:
+    restart: always
     image: ipoderator/foodgram_backend
     env_file: .env
     depends_on:
       - db
     volumes:
-      - static:/backend_static/
+      - static:/app/static/
       - media:/app/media
 
   frontend:
