@@ -23,10 +23,8 @@ services:
     depends_on:
       - db
     volumes:
-      - data:/app/data/
       - static:/app/static/
-      - media:/app/media/
-      - redoc:/app/docs/
+      - media:/app/media
 
   frontend:
     env_file: .env
