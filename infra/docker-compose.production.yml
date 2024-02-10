@@ -24,14 +24,13 @@ services:
       - db
     volumes:
       - data:/app/data/
-      - static:/app/collected_static/
       - media:/app/media/
-      - redoc:/app/docs/
+      - static:/app/collected_static/
+
 
   frontend:
     env_file: .env
     image: ipoderator/foodgram_frontend
-    command: cp -r /app/build/. /frontend_static/
     volumes:
       - ../frontend/:/app/result_build/
 
@@ -49,5 +48,3 @@ services:
     depends_on:
       - frontend
       - backend
-
-    
