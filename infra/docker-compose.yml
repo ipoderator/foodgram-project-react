@@ -13,7 +13,7 @@ services:
     restart: always
     volumes:
       - data:/app/data/
-      - static:/app/collected_static/
+      - static:/app/static/
       - media:/app/media/
       - redoc:/app/docs/
     depends_on:
