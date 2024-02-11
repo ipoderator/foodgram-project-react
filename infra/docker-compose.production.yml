@@ -45,4 +45,5 @@ services:
       - media:/var/html/media/
     depends_on:
       - frontend
+      - backend      
     restart: always
