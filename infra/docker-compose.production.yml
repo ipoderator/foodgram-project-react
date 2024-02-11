@@ -24,14 +24,16 @@ services:
       - db
     volumes:
       - static:/app/static/
-      - media:/app/media
+      - media:/app/media/
 
   frontend:
     env_file: .env
     image: ipoderator/foodgram_frontend
     command: cp -r /app/build/. /frontend_static/
     volumes:
-      - static:/app/result_build/build/
+      - static_value:/static/
+    depends_on:
+      - backend
 
   nginx:
     image: ipoderator/foodgram_nginx
