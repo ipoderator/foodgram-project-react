@@ -28,11 +28,9 @@ services:
   frontend:
     env_file: .env
     image: ipoderator/foodgram_frontend
-    command: cp -r /app/build/. /static/
+    command: cp -r /app/build/. /frontend_static/
     volumes:
-     - static:/static/
-    depends_on:
-     - backend
+      - static:/app/result_build/build/
 
   nginx:
     image: ipoderator/foodgram_nginx
