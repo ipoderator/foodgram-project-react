@@ -34,7 +34,6 @@ services:
 
   nginx:
     image: ipoderator/foodgram_nginx
-    env_file: .env
     ports:
       - "8000:80"
     volumes:
@@ -45,5 +44,4 @@ services:
       - media:/var/html/media/
     depends_on:
       - frontend
-      - backend      
     restart: always
