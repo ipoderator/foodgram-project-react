@@ -30,7 +30,7 @@ services:
     image: ipoderator/foodgram_frontend
     command: cp -r /app/build/. /static/
     volumes:
-     - static_value:/static/
+     - static:/static/
     depends_on:
      - backend
 
