@@ -1,18 +1,9 @@
-from api.paginations import RecipePagination
-from api.permissions import IsAuthorOrReadOnly
-from api.serializers import (IngredientSerializer, RecipeCreateSerializer,
-                             RecipeReadSerializer,
-                             RecipeShopSerializer, SubscribeSerializer,
-                             TagSerializer,
-                             UserReadSerializer)
-from foodgram.settings import FILE_NAME, CONTENT_TYPE
 from django.db.models import Sum
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from djoser.views import UserViewSet
-from recipes.models import (Favorite, Ingredient, IngredientAmount, Recipe,
-                            ShoppingCart, Tag)
+
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter
@@ -20,9 +11,19 @@ from rest_framework.permissions import (SAFE_METHODS, IsAuthenticated,
                                         IsAuthenticatedOrReadOnly)
 from rest_framework.response import Response
 from rest_framework.viewsets import ReadOnlyModelViewSet
-from users.models import Subscribe, User
 
 from api.filters import IngredientFilter, RecipeFilter
+from api.paginations import RecipePagination
+from api.permissions import IsAuthorOrReadOnly
+from api.serializers import (IngredientSerializer, RecipeCreateSerializer,
+                             RecipeReadSerializer,
+                             RecipeShopSerializer, SubscribeSerializer,
+                             TagSerializer,
+                             UserReadSerializer)
+from recipes.models import (Favorite, Ingredient, IngredientAmount, Recipe,
+                            ShoppingCart, Tag)
+from users.models import Subscribe, User
+from foodgram.settings import FILE_NAME, CONTENT_TYPE
 
 
 class CustomUserViewSet(UserViewSet):
@@ -167,7 +168,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
         detail=True,
         methods=['POST', 'DELETE'],
         permission_classes=(IsAuthenticated,),
-        pagination_class=None)
+        pagination_class=None
+    )
     def shopping_cart(self, request, **kwargs):
         recipe = get_object_or_404(Recipe, id=kwargs.get('pk'))
         user = request.user
@@ -187,7 +189,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        # Проверка существования объекта ShoppingCart
         shopping_cart = ShoppingCart.objects.filter(user=user,
                                                     recipe=recipe).first()
         if not shopping_cart:

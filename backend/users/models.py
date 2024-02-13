@@ -7,7 +7,6 @@ from django.utils.translation import gettext_lazy as _
 
 class User(AbstractUser):
     """Абстрактная модель пользователя."""
-
     username = models.CharField(
         _('username'),
         max_length=150,

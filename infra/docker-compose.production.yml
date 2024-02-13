@@ -24,7 +24,7 @@ services:
       - db
     volumes:
       - static:/app/static/
-      - media:/app/media
+      - media:/app/media/
 
   frontend:
     env_file: .env

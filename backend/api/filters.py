@@ -4,6 +4,12 @@ from users.models import User
 from rest_framework.filters import SearchFilter
 
 
+RECIPE_CHOICES = (
+    (0, 'Not_In_List'),
+    (1, 'In_List'),
+)
+
+
 class IngredientFilter(SearchFilter):
     """Фильтрация ингридиентов."""
 
@@ -12,12 +18,6 @@ class IngredientFilter(SearchFilter):
     class Meta:
         model = Ingredient
         fields = ('name',)
-
-
-RECIPE_CHOICES = (
-    (0, 'Not_In_List'),
-    (1, 'In_List'),
-)
 
 
 class RecipeFilter(filters.FilterSet):

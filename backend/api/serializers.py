@@ -14,7 +14,7 @@ from users.models import Subscribe, User
 
 
 class Base64ImageField(serializers.ImageField):
-    """Изображения."""
+    """Обработка изображения."""
     def to_internal_value(self, data):
         if isinstance(data, str) and data.startswith('data:image'):
             format, imgstr = data.split(';base64,')
@@ -160,28 +160,6 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
             'request': self.context.get('request')
         }).data
 
-    # def validate_ingredients(self, ingredients):
-    #     if not ingredients:
-    #         raise ValidationError('Необходимо ввести ингредиент')
-    #     attrs_data = (attr.get('id',) for attr in ingredients)
-    #     if len(attrs_data) != len(set(attrs_data)):
-    #         raise ValidationError(
-    #             'Ингредиенты для рецепта не должны повторяться')
-    #     for attr in ingredients:
-    #         if int(attr.get('amount')) < MIN_INGREDIENT_AMOUNT:
-    #             raise ValidationError('Неверевное количество ингредиента')
-    #     return ingredients
-
-    # def validate_tags(self, tags):
-    #     if not tags:
-    #         raise ValidationError('Необходимо ввести теги')
-    #     attrs_data = (attr.id for attr in tags)
-    #     if len(attrs_data) != len(set(attrs_data)):
-    #         raise ValidationError(
-    #             'Теги для рецепта не должны повторяться'
-    #         )
-    #     return tags
-
     def validate_min_max_ingredients(self, ingredients):
         if len(ingredients) < MIN_INGREDIENT_AMOUNT:
             raise ValidationError(f'Минимальное количество ингредиентов:'
@@ -288,8 +266,7 @@ class RecipeReadSerializer(serializers.ModelSerializer):
 
 class SubscribeSerializer(serializers.ModelSerializer):
     """
-    Данные о пользователе, на которого
-    сделана подписка.
+    Информация о пользователе.
     """
     recipes_count = serializers.SerializerMethodField()
     is_subscribed = serializers.SerializerMethodField()
@@ -331,7 +308,7 @@ class SubscribeSerializer(serializers.ModelSerializer):
 
 
 class RecipeShortSerializer(serializers.ModelSerializer):
-    """Класс сериализатора для представления краткой версии рецепта."""
+    """Краткая версия рецепта."""
     image = Base64ImageField()
 
     class Meta:

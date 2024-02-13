@@ -7,7 +7,7 @@ from foodgram.settings import MIN_AMOUNT_MODEL, MIN_TIME_MODEL
 
 
 class Ingredient(models.Model):
-    """Модель ингредиенты."""
+    """Модель ингредиентов."""
     name = models.CharField(
         max_length=200,
         verbose_name='Название ингредиенты',
@@ -29,7 +29,6 @@ class Ingredient(models.Model):
 
 
 class Tag(models.Model):
-    """Модель тега."""
     name = models.CharField(
         max_length=200,
         unique=True,
@@ -44,7 +43,8 @@ class Tag(models.Model):
     slug = models.SlugField(
         max_length=200,
         unique=True,
-        verbose_name='Уникальный слаг',)
+        verbose_name='Уникальный слаг',
+    )
 
     class Meta:
         ordering = ('name',)
@@ -56,7 +56,7 @@ class Tag(models.Model):
 
 
 class Recipe(models.Model):
-    """Модель рецепта."""
+    """Модель рецептов."""
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -92,7 +92,8 @@ class Recipe(models.Model):
     )
     cooking_time = models.PositiveSmallIntegerField(
         validators=(validators.MinValueValidator(
-            MIN_TIME_MODEL, f'Минимум {MIN_TIME_MODEL} минута'),),
+            MIN_TIME_MODEL,
+            f'Время приготовления минимум {MIN_TIME_MODEL} минута'),),
         verbose_name='Время приготовления',
     )
     pub_date = models.DateTimeField(
