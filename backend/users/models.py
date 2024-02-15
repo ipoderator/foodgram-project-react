@@ -6,7 +6,14 @@ from django.utils.translation import gettext_lazy as _
 
 
 class User(AbstractUser):
-    """Абстрактная модель пользователя."""
+    """
+    Абстрактная модель пользователя
+    Я думаю что нужно переопределять,
+    потому что так удобнее добавлять различные методы
+    при развитии проекта и переопределить
+    её уже после того как написал проект, будут проблемы с миграциями
+    и не удобно будет все это рука удалять и заново их делать
+    """
 
     username = models.CharField(
         _('username'),
@@ -46,7 +53,7 @@ class User(AbstractUser):
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.username
 
 
@@ -74,7 +81,7 @@ class Subscribe(models.Model):
         verbose_name = 'Подписка'
         verbose_name_plural = 'Подписки'
         models.UniqueConstraint(fields=['user', 'author'],
-                                name='unique_ff')
+                                name='unique_subscribe')
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f'Пользователь {self.user} подписался на автора {self.author}'

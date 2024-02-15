@@ -1,67 +1,26 @@
-import csv
-import os
+import logging
+from csv import DictReader
 
-from django.conf import settings
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 from recipes.models import Ingredient
 
-DEFAULT_IMPORT_FOLDER_NAME = 'data'
-DEFAULT_IMPORT_FILE_NAME = 'ingredients.csv'
-DEFAULT_IMPORT_FILE_PATH = os.path.join(
-    settings.BASE_DIR, DEFAULT_IMPORT_FOLDER_NAME,
-)
-
-MSG_SUCCESSFUL = 'Import completed successfully!'
-MSG_UNSUCCESSFUL = 'Import failed...'
-MSG_NO_CHANGES = 'No changes detected.'
-
-ERR_FILE_NOT_EXISTS = (
-    f"File with name '{DEFAULT_IMPORT_FILE_NAME}' "
-    f"in folder '{DEFAULT_IMPORT_FOLDER_NAME}' is required!",
-)
-ERR_ARGS_FILE_NOT_EXISTS = ("There is no such file as '{}'")
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger()
 
 
 class Command(BaseCommand):
-    help = ("This command perform to import all ingredients data "
-            "from CSV file into database")
-
-    def add_arguments(self, parser):
-        parser.add_argument('-f', '--filename', dest='filename',
-                            default=DEFAULT_IMPORT_FILE_NAME, nargs='?',
-                            type=str, help='specify file name.')
-
     def handle(self, *args, **options):
-        PATH_TO_FILE = os.path.join(
-            DEFAULT_IMPORT_FILE_PATH,
-            options['filename'],
-        )
-        count_rows = 0
-        try:
-            with open(file=PATH_TO_FILE,
-                      mode='r',
-                      encoding='utf-8') as file:
-                data = csv.reader(file)
-                for row in data:
-                    name, measurement_unit = row
-                    ingredient, created = Ingredient.objects.get_or_create(
-                        name=name, measurement_unit=measurement_unit,
-                    )
-                    if created:
-                        count_rows += 1
-            if count_rows == 0:
-                self.stdout.write(self.style.NOTICE(MSG_NO_CHANGES))
-            else:
-                self.stdout.write(self.style.SUCCESS(
-                    MSG_SUCCESSFUL + f' {count_rows} rows added.'
-                )
-                )
-        except FileNotFoundError:
-            self.stdout.write(self.style.ERROR(MSG_UNSUCCESSFUL))
-            if options['filename']:
-                self.stdout.write(self.style.ERROR(
-                    ERR_ARGS_FILE_NOT_EXISTS.format(options['filename'])
-                )
-                )
-            else:
-                raise CommandError(ERR_FILE_NOT_EXISTS)
+
+        ingredient_list = []
+        count = 0
+        data = open("./data/ingredients.csv", encoding="utf-8")
+        for row in DictReader(data):
+            name, measurement_unit = row
+            ingredient = Ingredient(
+                name=name, measurement_unit=measurement_unit
+            )
+            ingredient_list.append(ingredient)
+            count += 1
+
+        Ingredient.objects.bulk_create(ingredient_list)
+        logger.info(f"Успешно загружено {count} кол-во ингредиентов")
