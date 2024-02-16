@@ -153,3 +153,4 @@ MIN_AMOUNT_MODEL = 1
 MIN_TIME_MODEL = 1
 FILE_NAME = 'shopping_cart.txt'
 CONTENT_TYPE = 'text/plain'
+PAGE_SIZE = 6

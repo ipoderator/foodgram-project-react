@@ -116,7 +116,7 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
                   'image', 'name', 'text',
                   'cooking_time', 'author')
 
-    def create_ingredients_amount(self, ingredients, recipe):
+    def create_ingredients_amount(self, ingredients: str, recipe: str):
         IngredientAmount.objects.bulk_create([
             IngredientAmount(
                 ingredient=ingredient.get('id'),
@@ -160,28 +160,6 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
             'request': self.context.get('request')
         }).data
 
-    # def validate_ingredients(self, ingredients):
-    #     if not ingredients:
-    #         raise ValidationError('Необходимо ввести ингредиент')
-    #     attrs_data = (attr.get('id',) for attr in ingredients)
-    #     if len(attrs_data) != len(set(attrs_data)):
-    #         raise ValidationError(
-    #             'Ингредиенты для рецепта не должны повторяться')
-    #     for attr in ingredients:
-    #         if int(attr.get('amount')) < MIN_INGREDIENT_AMOUNT:
-    #             raise ValidationError('Неверевное количество ингредиента')
-    #     return ingredients
-
-    # def validate_tags(self, tags):
-    #     if not tags:
-    #         raise ValidationError('Необходимо ввести теги')
-    #     attrs_data = (attr.id for attr in tags)
-    #     if len(attrs_data) != len(set(attrs_data)):
-    #         raise ValidationError(
-    #             'Теги для рецепта не должны повторяться'
-    #         )
-    #     return tags
-
     def validate_min_max_ingredients(self, ingredients):
         if len(ingredients) < MIN_INGREDIENT_AMOUNT:
             raise ValidationError(f'Минимальное количество ингредиентов:'
@@ -191,7 +169,7 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
                                   f'{MAX_INGREDIENT_AMOUNT}')
         return ingredients
 
-    def validate_cooking_time(self, cooking_time):
+    def validate_cooking_time(self, cooking_time: int):
         if cooking_time < MIN_COOKING_TIME:
             raise ValidationError(f'Минимальное время готовки:'
                                   f'{MIN_COOKING_TIME} минута')
@@ -200,14 +178,16 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
                                   f'{MAX_COOKING_TIME} минут (10 часов)')
         return cooking_time
 
-    def validate_duplicate_ingredients(self, ingredients):
+    def validate_duplicate_ingredients(self, ingredients: str):
+        if not ingredients:
+            raise ValidationError('Нельзя создать рецепт без ингредиента')
+        return ingredients
+
+    def ingredients_no_repeated(self, ingredients: str):
         attrs_data = [attr.get('id') for attr in ingredients]
         if len(attrs_data) != len(set(attrs_data)):
             raise ValidationError('Ингредиенты для рецепта'
                                   'не должны повторяться')
-        if not ingredients:
-            raise ValidationError('Нельзя создать рецепт без ингредиента')
-        return ingredients
 
 
 class RecipeSerializer(serializers.ModelSerializer):

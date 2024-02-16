@@ -1,7 +1,8 @@
 import django_filters as filters
+from rest_framework.filters import SearchFilter
+
 from recipes.models import Ingredient, Recipe
 from users.models import User
-from rest_framework.filters import SearchFilter
 
 
 class IngredientFilter(SearchFilter):
@@ -14,15 +15,12 @@ class IngredientFilter(SearchFilter):
         fields = ('name',)
 
 
-RECIPE_CHOICES = (
-    (0, 'Not_In_List'),
-    (1, 'In_List'),
-)
-
-
 class RecipeFilter(filters.FilterSet):
     """Фильтрация рецептов."""
-
+    RECIPE_CHOICES = (
+        (0, 'Not_In_List'),
+        (1, 'In_List'),
+    )
     author = filters.ModelChoiceFilter(
         queryset=User.objects.all()
     )
@@ -39,7 +37,7 @@ class RecipeFilter(filters.FilterSet):
         label='Ссылка'
     )
 
-    def get_is_in(self, queryset, name, value):
+    def get_is_in(self, queryset: list, name: str, value: str):
         """
         Фильтрация рецептов по избранному и списку покупок.
         """
@@ -48,8 +46,6 @@ class RecipeFilter(filters.FilterSet):
             if value == '1':
                 if name == 'is_favorited':
                     queryset = queryset.filter(favorite_recipes__user=user)
-                if name == 'is_in_shopping_cart':
-                    queryset = queryset.filter(shopping_cart__user=user)
         return queryset
 
     class Meta:
